@@ -15,6 +15,7 @@ public class DriveEncoders extends Command {
 
     public DriveEncoders(DriveTrain driveTrain, double speed, double userFeet, boolean reverse) {
         driveDistance = userFeet;
+        endDistance = userFeet;
         botSpeed = speed;
         this.reverse = reverse;
         this.driveTrain = driveTrain;
@@ -23,14 +24,13 @@ public class DriveEncoders extends Command {
 
     @Override
     public void initialize() {
-      endDistance = 0;
       driveTrain.resetEncoders();
       //endDistance = driveTrain.getLeftEncoderPos() + driveDistance;
       if (reverse != true) {
-        endDistance = 6.5;
+        endDistance = driveDistance;
       }
       else {
-        endDistance = -6.5;
+        endDistance = -driveDistance;
       }
     }
     @Override

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.time.Duration;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -132,20 +134,23 @@ public class RobotContainer {
         new DriveEncoders(driveTrain, 0.3, 2)
         );*/
         return new SequentialCommandGroup(
-            new ShooterForwardAuto(this.Shooter, this.Shooter, 3000, 0.5), 
+            /*shoots */
+            new ShooterForwardAuto(this.Shooter, this.Shooter, 2000, 0.5), 
             new ParallelRaceGroup(
-                new IntakeBackwardAuto(this.Intake, 1000, 0.5), 
+                new IntakeBackwardAuto(this.Intake, 500, 0.5), 
                 new ShooterStop(this.Shooter, this.Shooter)), 
             new ParallelRaceGroup(
                 //new IntakeStop(this.Intake), 
-                new DriveEncoders(driveTrain, 0.5, 6.5, false).withTimeout(3)),
+                new DriveEncoders(driveTrain, 0.6, 6.5, false).withTimeout(3)),
             new IntakeForwardAuto(this.Intake, 2000, 0.5),
-            new DriveEncoders(driveTrain, -0.5, 6.5, true).withTimeout(3),
-            new ShooterForwardAuto(Shooter, Shooter, 3000, 0.5),
+            new DriveEncoders(driveTrain, -0.6, 6.5, true).withTimeout(3),
+            new IntakeForwardAuto(this.Intake, 500, 0.5),
+            new ShooterForwardAuto(Shooter, Shooter, 2000, 0.5),
             new ParallelRaceGroup(
                 new IntakeBackwardAuto(this.Intake, 1000, 0.5), 
                 new ShooterStop(this.Shooter, this.Shooter)),
-            new IntakeStop(Intake)
+            new DriveEncoders(driveTrain, 0.6, 7, false),
+            new IntakeBackwardAuto(Intake, 10, 0)           
             );
 
         // new SequentialCommandGroup(new ShooterForwardAuto(this.Shooter, this.Shooter, 3000, 0.5), new ParallelRaceGroup(new IntakeBackwardAuto(this.Intake, 1000, 0.5), new ShooterStop(this.Shooter, this.Shooter)), new ParallelCommandGroup(new IntakeStop(this.Intake), new DriveTrainAutoTimeBased(this.driveTrain, 1500, 0.5, 0.5)));
