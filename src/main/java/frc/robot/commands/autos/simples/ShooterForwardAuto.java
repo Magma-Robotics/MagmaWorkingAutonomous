@@ -8,17 +8,14 @@ public class ShooterForwardAuto extends Command {
 
 
     private double power, duration;
-    private final Shooter ShooterMotor1, ShooterMotor2;
+    private final Shooter shooter;
 
 
-    public ShooterForwardAuto(Shooter ShooterMotor1, Shooter ShooterMotor2, double duration, double power) {
-        this.ShooterMotor1 = ShooterMotor1;
-        this.ShooterMotor2 = ShooterMotor2;
+    public ShooterForwardAuto(Shooter shooter, double duration, double power) {
+        this.shooter = shooter;
         this.duration = duration;
         this.power = power;
-        addRequirements(ShooterMotor1);
-        addRequirements(ShooterMotor2);
-
+        addRequirements(shooter);
     }
 
 
@@ -32,8 +29,7 @@ public class ShooterForwardAuto extends Command {
 
     // called repeatedly when this Command is scheduled to run
     public void execute() {
-        this.ShooterMotor1.ShooterMotor1ForwardAuto(this.power);
-        this.ShooterMotor2.ShooterMotor2BackwardAuto(this.power);
+        shooter.autoShooterForward(power);
     }
 
 
@@ -47,8 +43,7 @@ public class ShooterForwardAuto extends Command {
     // called once after isFinished returns true
     // drive train is stopped
     protected void end() {
-        this.ShooterMotor1.ShooterMotor1Stop();
-        this.ShooterMotor2.ShooterMotor2Stop();
+        shooter.stopShooter();
     }
 
 

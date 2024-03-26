@@ -17,15 +17,15 @@ public class Lift extends SubsystemBase {
     /**
      * an abstract representation of a physical robot arm
      */
-    private CANSparkMax Lift;
+    private CANSparkMax leftLift, rightLift;
 
   
     /**
      * subsystem base object for arm
      */
     public Lift() {
-        this.Lift = new CANSparkMax(13, MotorType.kBrushless);
-        
+        this.leftLift = new CANSparkMax(Constants.Subsystems.Lift.kLeftLiftId, MotorType.kBrushless);
+        this.rightLift = new CANSparkMax(Constants.Subsystems.Lift.kRightLiftId, MotorType.kBrushless);
     }
 
 
@@ -33,7 +33,8 @@ public class Lift extends SubsystemBase {
      * arm goes up by setting power on the arm motor
      */
     public void LiftUp() {
-        this.Lift.set(Constants.Subsystems.Lift.kPOWER);
+        this.leftLift.set(Constants.Subsystems.Lift.kPOWER);
+        this.rightLift.set(Constants.Subsystems.Lift.kPOWER);
     }
 
 
@@ -41,7 +42,8 @@ public class Lift extends SubsystemBase {
      * second arm goes down by setting power on the arm motor
      */
     public void LiftDown() {
-        this.Lift.set(-Constants.Subsystems.Lift.kPOWER);
+        this.leftLift.set(-Constants.Subsystems.Lift.kPOWER);
+        this.rightLift.set(-Constants.Subsystems.Lift.kPOWER);
     }
 
 
@@ -50,11 +52,13 @@ public class Lift extends SubsystemBase {
      * to stop second motors
      */
     public void LiftStop() {
-        this.Lift.stopMotor();
+        this.leftLift.stopMotor();
+        this.rightLift.stopMotor();
     }
 
     public void LiftUpAuto(double power) {
-        this.Lift.set(power);
+        this.leftLift.set(power);
+        this.rightLift.set(power);
     }
 
 
@@ -62,7 +66,8 @@ public class Lift extends SubsystemBase {
      * second arm goes down by setting power on the arm motor
      */
     public void LiftDownAuto(double power) {
-        this.Lift.set(-power);
+        this.leftLift.set(-power);
+        this.rightLift.set(power);
     }
   
 }

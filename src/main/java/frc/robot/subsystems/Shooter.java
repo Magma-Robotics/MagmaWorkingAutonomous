@@ -17,38 +17,65 @@ public class Shooter extends SubsystemBase {
     /**
      * an abstract representation of a physical robot arm
      */
-    private CANSparkMax ShooterMotor1, ShooterMotor2;
+    private CANSparkMax leftShooter, rightShooter, pushMotor;
 
   
     /**
      * subsystem base object for arm
      */
     public Shooter() {
-        this.ShooterMotor1 = new CANSparkMax(10, MotorType.kBrushless);
-        this.ShooterMotor2 = new CANSparkMax(11, MotorType.kBrushless);
+        this.leftShooter = new CANSparkMax(Constants.Subsystems.Shooter.kLeftShooterId, MotorType.kBrushless);
+        this.rightShooter = new CANSparkMax(Constants.Subsystems.Shooter.kRightShooterId, MotorType.kBrushless);
+        pushMotor = new CANSparkMax(Constants.Subsystems.Shooter.kPushMotorId, MotorType.kBrushless);
         
     }
 
+    public void stopShooter() {
+        leftShooter.stopMotor();
+        rightShooter.stopMotor();
+    }
 
-    /**
-     * arm goes up by setting power on the arm motor
-     */
+    public void stopPushMotor() {
+        pushMotor.stopMotor();
+    }
+
+    public void shooterForward() {
+        leftShooter.set(-Constants.Subsystems.Shooter.kPOWER);
+        rightShooter.set(Constants.Subsystems.Shooter.kPOWER);
+    }
+
+    public void shooterBackward() {
+        leftShooter.set(Constants.Subsystems.Shooter.kPOWER);
+        rightShooter.set(-Constants.Subsystems.Shooter.kPOWER);
+    }
+
+    public void pushMotorForward(double power) {
+        pushMotor.set(-power);
+    }
+
+    public void pushMotorBackward(double power) {
+        pushMotor.set(power);
+    }
+
+    public void autoShooterForward(double power) {
+        leftShooter.set(-power);
+        rightShooter.set(power);
+    }
+
+    public void autoShooterBackward(double power) {
+        leftShooter.set(power);
+        rightShooter.set(-power);
+    }
+/*
     public void ShooterMotor1Forward() {
         this.ShooterMotor1.set(Constants.Subsystems.Shooter.kPOWER);
     }
 
-    /**
-     * arm goes down by setting power on the arm motor
-     */
     public void ShooterMotor1Backward() {
         this.ShooterMotor1.set(-Constants.Subsystems.Shooter.kPOWER);
     }
 
 
-    /**
-     * calls stopMotor method within {@link edu.wpi.first.wpilibj.drive.DifferentialDrive}
-     * to stop motors
-     */
     public void ShooterMotor1Stop() {
         this.ShooterMotor1.stopMotor();
     }
@@ -97,5 +124,5 @@ public class Shooter extends SubsystemBase {
     public void ShooterMotor2BackwardWeaker() {
         this.ShooterMotor2.set(-0.5);
     }
-
+*/
 }

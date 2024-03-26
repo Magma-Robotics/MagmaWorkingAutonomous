@@ -48,10 +48,10 @@ public class DriveTrain extends SubsystemBase {
 
     public DriveTrain() {
 
-        this.frontLeftDriveMotor = new CANSparkMax(1, MotorType.kBrushless);
-        this.rearLeftDriveMotor = new CANSparkMax(2, MotorType.kBrushless);
-        this.frontRightDriveMotor = new CANSparkMax(3, MotorType.kBrushless);
-        this.rearRightDriveMotor = new CANSparkMax(4, MotorType.kBrushless);
+        this.frontLeftDriveMotor = new CANSparkMax(Constants.Subsystems.DriveTrain.kFrontLeftId, MotorType.kBrushless);
+        this.rearLeftDriveMotor = new CANSparkMax(Constants.Subsystems.DriveTrain.kRearLeftId, MotorType.kBrushless);
+        this.frontRightDriveMotor = new CANSparkMax(Constants.Subsystems.DriveTrain.kFrontRightId, MotorType.kBrushless);
+        this.rearRightDriveMotor = new CANSparkMax(Constants.Subsystems.DriveTrain.kRearRightId, MotorType.kBrushless);
 
         this.frontLeftDriveMotorEncoder = this.frontLeftDriveMotor.getEncoder();
         this.rearLeftDriveMotorEncoder = this.rearLeftDriveMotor.getEncoder();
@@ -89,9 +89,6 @@ public class DriveTrain extends SubsystemBase {
         this.diffDrive = new DifferentialDrive(this.frontLeftDriveMotor, this.frontRightDriveMotor);
         SmartDashboard.putData(diffDrive);
         this.frontLeftDriveMotorEncoder.setPosition(0);
-        SmartDashboard.putNumber("get position", this.frontLeftDriveMotorEncoder.getPosition());
-
-
     }
 
     /**

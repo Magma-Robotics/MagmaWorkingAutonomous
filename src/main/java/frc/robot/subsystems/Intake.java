@@ -24,7 +24,7 @@ public class Intake extends SubsystemBase {
      * subsystem base object for arm
      */
     public Intake() {
-        this.Intake = new CANSparkMax(12, MotorType.kBrushless);
+        this.Intake = new CANSparkMax(Constants.Subsystems.Intake.kIntakeId, MotorType.kBrushless);
         this.Intake.restoreFactoryDefaults();
         this.Intake.burnFlash();
         

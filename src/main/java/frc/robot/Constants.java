@@ -15,63 +15,43 @@ package frc.robot;
  */
 public class Constants {
 
-
     public static class Control {
 
         public static class ControllerPort {
             public static final int kDRIVER = 0;
             public static final int kPARTNER = 1; 
         }
-
-        public static class JoystickController {
-            public static final int kPOSITION = 1;
-            public static final int kANGLE = 2;
-            public static final int kSPEED = 3;
-        }
-
-        //daniels driver preference
-        public static class XboxController {
-            
-            public static final int kLEFT = 1;
-            public static final int kRIGHT = 5;
-            public static final int kAngle = 4;
-        }
-
-        public static class Button {
-            public static final int kA = 1;
-            public static final int kB = 2;
-            public static final int kX = 3;
-            public static final int kY = 4;
-            public static final int kLEFT_BUMPER = 5;
-            public static final int kRIGHT_BUMPER = 6;
-        }
-
-        public static class POVButton {
-            public static final int kUP = 0;
-            public static final int kDOWN = 180;
-            public static final int kLEFT = 90;
-            public static final int kRIGHT = 270;
-        }
-
     }
 
 
-    public static class Subsystems{
+    public static class Subsystems {
         public static class Intake{
+            public static final int kIntakeId = 12;
             public static final double kPOWER = 0.7;
         }
         public static class Shooter{
+            public static final int kLeftShooterId = 10;
+            public static final int kRightShooterId = 11;
+            public static final int kPushMotorId = 17;
             public static final double kPOWER = 0.7;
             public static final double kPOWERWEAKER = 0.5;
 
         }
         public static class Lift{
+            public static final int kLeftLiftId = 13;
+            public static final int kRightLiftId = 14;
             public static final double kPOWER = 1;
         }
         public static class DriveTrain { 
+            public static final int kFrontLeftId = 1;
+            public static final int kRearLeftId = 2;
+            public static final int kFrontRightId = 3;
+            public static final int kRearRightId = 4;
             public static final double kLinearDistanceConversionFactor = 0.12;
         }
         public static class Pivot {
+            public static final int kLeftPivotId = 15;
+            public static final int kRightPivotId = 16;
             public static final double kLinearDistanceConversionFactor = 0.5;
         }
     }

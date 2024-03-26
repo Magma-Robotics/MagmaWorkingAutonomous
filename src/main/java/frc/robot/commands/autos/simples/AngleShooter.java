@@ -1,9 +1,9 @@
-package frc.robot.subsystems;
+package frc.robot.commands.autos.simples;
 
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Pivot;
 
 
 public class AngleShooter extends Command {
@@ -12,10 +12,11 @@ public class AngleShooter extends Command {
     private double endDegrees;
 
 
-    public AngleShooter(Pivot Pivot, double botSpeed, double endDegrees) {
+    public AngleShooter(Pivot pivot, double botSpeed, double endDegrees) {
         this.endDegrees = endDegrees;
         this.botSpeed = botSpeed;
-        addRequirements(Pivot);
+        this.pivot = pivot;
+        addRequirements(pivot);
     }
 
     @Override
@@ -29,17 +30,17 @@ public class AngleShooter extends Command {
     }
     @Override
     public void execute() {
-      SmartDashboard.putNumber("Left Encoder Pos", pivot.getPivotMotorEncoderPos());
+      SmartDashboard.putNumber("LeftPivot Encoder Pos", pivot.getLeftPivotEncoderPos());
     }
 
 
     @Override
     public boolean isFinished() {
       if (botSpeed > 0) {
-        return pivot.getPivotMotorEncoderPos() >= endDegrees;
+        return pivot.getLeftPivotEncoderPos() >= endDegrees;
       }
       else {
-        return (pivot.getPivotMotorEncoderPos() <= endDegrees);
+        return (pivot.getLeftPivotEncoderPos() <= endDegrees);
       }
     }
 

@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.autos.complex.Complex;
+import frc.robot.commands.autos.simples.AngleShooter;
 import frc.robot.commands.autos.simples.DriveEncoders;
 import frc.robot.commands.autos.simples.DriveTrainAutoTimeBased;
 import frc.robot.commands.autos.simples.IntakeBackwardAuto;
@@ -43,15 +44,11 @@ import frc.robot.commands.lift.LiftStop;
 import frc.robot.commands.lift.LiftUp;
 import frc.robot.commands.shooter.ShooterBackward;
 import frc.robot.commands.shooter.ShooterForward;
-import frc.robot.commands.shooter.ShooterMid;
-import frc.robot.commands.shooter.ShooterWeak;
 import frc.robot.commands.shooter.ShooterStop;
-import frc.robot.subsystems.AngleShooter;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Pivot;
-import frc.robot.subsystems.Rotate;
 import frc.robot.subsystems.Shooter;
 
 
@@ -71,35 +68,16 @@ public class RobotContainer {
     Intake Intake = new Intake();
     Lift Lift = new Lift();
     Pivot Pivot = new Pivot();
-    private double botSpeed;
-    private double endDegrees;
-    AngleShooter angleShooter = new AngleShooter(Pivot, botSpeed, endDegrees);
    
     SendableChooser<Command> m_auto_chooser = new SendableChooser<>();
 
 
-    XboxController driverController, driverPartnerController;
-    JoystickButton buttonA, buttonB, buttonX, buttonY, rightBumper, leftBumper, driverRightBumper;
-    POVButton upPOV, downPOV, leftPOV, rightPOV;
+    CommandXboxController driverController, driverPartnerController;
    
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        this.driverController = new XboxController(Constants.Control.ControllerPort.kDRIVER);
-        this.driverPartnerController = new XboxController(Constants.Control.ControllerPort.kPARTNER);
-       
-        this.driverRightBumper = new JoystickButton(driverController, Constants.Control.Button.kRIGHT_BUMPER);
-
-
-        this.buttonA = new JoystickButton(driverPartnerController, Constants.Control.Button.kA);
-        this.buttonB = new JoystickButton(driverPartnerController, Constants.Control.Button.kB);
-        this.buttonX = new JoystickButton(driverPartnerController, Constants.Control.Button.kX);
-        this.buttonY = new JoystickButton(driverPartnerController, Constants.Control.Button.kY);
-        this.rightBumper = new JoystickButton(driverPartnerController, Constants.Control.Button.kRIGHT_BUMPER);
-        this.leftBumper = new JoystickButton(driverPartnerController, Constants.Control.Button.kLEFT_BUMPER);
-        this.upPOV = new POVButton(driverPartnerController, Constants.Control.POVButton.kUP);
-        this.downPOV = new POVButton(driverPartnerController, Constants.Control.POVButton.kDOWN);
-        this.leftPOV = new POVButton(driverPartnerController, Constants.Control.POVButton.kLEFT);
-        this.rightPOV = new POVButton(driverPartnerController, Constants.Control.POVButton.kRIGHT);
+        this.driverController = new CommandXboxController(Constants.Control.ControllerPort.kDRIVER);
+        this.driverPartnerController = new CommandXboxController(Constants.Control.ControllerPort.kPARTNER);
        
         this.driveTrain.setDefaultCommand(new DriveTrainCommand(this.driveTrain, this.driverController));
 
@@ -125,22 +103,19 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-        this.buttonY.onTrue(new ShooterForward(this.Shooter,this.Shooter)).onFalse(new ShooterStop(this.Shooter, this.Shooter));
-        this.buttonX.onTrue(new ShooterBackward(this.Shooter, this.Shooter)).onFalse(new ShooterStop(this.Shooter, this.Shooter));
-        this.rightBumper.onTrue(new IntakeForward(this.Intake)).onFalse(new IntakeStop(this.Intake));
-        this.leftBumper.onTrue(new IntakeBackward(this.Intake)).onFalse(new IntakeStop(this.Intake));
-        // this.buttonA.onTrue(new IntakeForwardAuto(this.Intake, 1000, 0.5).andThen(new IntakeBackwardAuto(this.Intake, 1000, 0.5).andThen(new ShooterForwardAuto(this.Shooter, this.Shooter, 1000, 0.5)))).onFalse(new ParallelCommandGroup(new IntakeStop(this.Intake),new ShooterStop(this.Shooter)));
-        this.upPOV.onTrue(new LiftUp(this.Lift)).onFalse(new LiftStop(this.Lift));
-        this.downPOV.onTrue(new LiftDown(this.Lift)).onFalse(new LiftStop(this.Lift));
-        this.buttonA.onTrue(new ShooterWeak(this.Shooter, this.Shooter)).onFalse(new ShooterStop(this.Shooter, this.Shooter));
-        this.buttonB.onTrue(new ShooterMid(this.Shooter, this.Shooter)).onFalse(new ShooterStop(this.Shooter, this.Shooter));
-        this.leftPOV.onTrue(new AngleShooter(this.Pivot, 0.5, 6)).onFalse(new AngleShooter(this.Pivot,0,0));
+        driverPartnerController.y().onTrue(new ShooterForward(Shooter)).onFalse(new ShooterStop(Shooter));
+        driverPartnerController.x().onTrue(new ShooterBackward(Shooter)).onFalse(new ShooterStop(Shooter));
+        driverPartnerController.rightBumper().onTrue(new IntakeForward(Intake)).onFalse(new IntakeStop(Intake));
+        driverPartnerController.leftBumper().onTrue(new IntakeBackward(Intake)).onFalse(new IntakeStop(Intake));
+        driverPartnerController.povUp().onTrue(new LiftUp(Lift)).onFalse(new LiftStop(Lift));
+        driverPartnerController.povDown().onTrue(new LiftDown(Lift)).onFalse(new LiftStop(Lift));
+        //driverPartnerController.a().onTrue(new ShooterWeak(Shooter)).onFalse(new ShooterStop(Shooter));
+        //driverPartnerController.b().onTrue(new ShooterMid(Shooter)).onFalse(new ShooterStop(Shooter));
+        //driverPartnerController.povLeft().onTrue(new AngleShooter(Pivot, 0.5, 6)).onFalse(new AngleShooter(Pivot, 0, 0));
 
+        driverController.rightBumper().onTrue(new DriveTrainCommandSlower(driveTrain, driverController)).onFalse(new DriveTrainCommand(driveTrain, driverController));
 
-        this.driverRightBumper.onTrue(new DriveTrainCommandSlower(this.driveTrain, this.driverController)).onFalse(new DriveTrainCommand(this.driveTrain, this.driverController));
-
-
+        
         //RobotModeTriggers.autonomous().onTrue(Commands.runOnce(driveTrain::resetEncoders));
     }
 
@@ -236,20 +211,20 @@ public class RobotContainer {
     private Command MiddleAuto() {
         return new SequentialCommandGroup(
             /*shoots */
-            new ShooterForwardAuto(this.Shooter, this.Shooter, 2000, 0.5),
+            new ShooterForwardAuto(this.Shooter, 2000, 0.5),
             new ParallelRaceGroup(
                 new IntakeBackwardAuto(this.Intake, 500, 0.5),
-                new ShooterStop(this.Shooter, this.Shooter)),
+                new ShooterStop(this.Shooter)),
             new ParallelRaceGroup(
                 //new IntakeStop(this.Intake),
                 new DriveEncoders(driveTrain, 0.6, 6.5, false).withTimeout(3)),
             new IntakeForwardAuto(this.Intake, 2000, 0.5),
             new DriveEncoders(driveTrain, -0.6, 6.5, true).withTimeout(3),
             new IntakeForwardAuto(this.Intake, 500, 0.5),
-            new ShooterForwardAuto(Shooter, Shooter, 2000, 0.5),
+            new ShooterForwardAuto(Shooter, 2000, 0.5),
             new ParallelRaceGroup(
                 new IntakeBackwardAuto(this.Intake, 1000, 0.5),
-                new ShooterStop(this.Shooter, this.Shooter)),
+                new ShooterStop(this.Shooter)),
             new DriveEncoders(driveTrain, 0.8, 7, false),
             new IntakeBackwardAuto(Intake, 10, 0)          
             );

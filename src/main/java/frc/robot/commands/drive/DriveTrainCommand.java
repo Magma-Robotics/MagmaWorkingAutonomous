@@ -2,6 +2,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.DriveTrain;
 
 
@@ -12,14 +13,14 @@ public class DriveTrainCommand extends Command {
      * an instance of {@link frc.robot.subsystems.DriveTrain}
      */
     private final DriveTrain driveTrain;
-    private final XboxController driveController;
+    private final CommandXboxController driveController;
 
 
     /**
      * @param driveTrain an instance of {@link frc.robot.subsystems.DriveTrain}
      * @param driveController an instance of {@link edu.wpi.first.wpilibj.XboxController}
      */
-    public DriveTrainCommand(DriveTrain driveTrain, XboxController driveController){
+    public DriveTrainCommand(DriveTrain driveTrain, CommandXboxController driveController){
         this.driveTrain = driveTrain;
         this.driveController = driveController;
         addRequirements(driveTrain);

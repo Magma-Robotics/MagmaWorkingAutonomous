@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,63 +22,51 @@ public class Pivot extends SubsystemBase {
      * an abstract representation of a physical drive motor
      */
 
-    private CANSparkMax PivotMotor;
+    private CANSparkMax leftPivotMotor, rightPivotMotor;
 
-    private RelativeEncoder PivotMotorEncoder;
+    private RelativeEncoder leftPivotEncoder, rightPivotEncoder;
+    private ProfiledPIDController pivotPIDController;
 
 
     public Pivot() {
 
-        this.PivotMotor = new CANSparkMax(3, MotorType.kBrushless);
+        this.leftPivotMotor = new CANSparkMax(Constants.Subsystems.Pivot.kLeftPivotId, MotorType.kBrushless);
+        this.rightPivotMotor = new CANSparkMax(Constants.Subsystems.Pivot.kRightPivotId, MotorType.kBrushless);
 
-        this.PivotMotorEncoder = this.PivotMotor.getEncoder();
+        this.leftPivotEncoder = this.leftPivotMotor.getEncoder();
+        rightPivotEncoder = rightPivotMotor.getEncoder();
     
-        this.PivotMotor.restoreFactoryDefaults();
+        this.leftPivotMotor.restoreFactoryDefaults();
+        rightPivotMotor.restoreFactoryDefaults();
 
-        PivotMotor.setInverted(false);
-        
-        this.PivotMotor.burnFlash();
+        rightPivotMotor.follow(leftPivotMotor);
 
+        leftPivotMotor.setInverted(false);
+        rightPivotMotor.setInverted(false);
         
-        // pidController = frontLeftDriveMotor.getPIDController();
-        // pidController.setP(kP);
-        // pidController.setI(kI);
-        // pidController.setD(kD);
-        // pidController.setIZone(kIz);
-        // pidController.setFF(kFF);
-        // pidController.setOutputRange(kMinOutput, kMaxOutput);
+        this.leftPivotMotor.burnFlash();
+        rightPivotMotor.burnFlash();
     
-        this.PivotMotorEncoder.setPosition(0);
-        SmartDashboard.putNumber("get position", this.PivotMotorEncoder.getPosition());
-
-
+        resetEncoders();
+        SmartDashboard.putNumber("Left Pivot", this.leftPivotEncoder.getPosition());
+        SmartDashboard.putData("Pivot PID", pivotPIDController);
     }
 
-    /**
-     * calls stopMotor method within {@link edu.wpi.first.wpilibj.drive.DifferentialDrive}
-     * to stop motors
-     */
     public void PivotStop() {
-        this.PivotMotor.set(0);
+        this.leftPivotMotor.stopMotor();
+        rightPivotMotor.stopMotor();
     }
 
     public void resetEncoders() {
-        PivotMotorEncoder.setPosition(0);
+        leftPivotEncoder.setPosition(0);
+        rightPivotEncoder.setPosition(0);
     }
 
-    public double getPivotMotorEncoderPos() {
-        return PivotMotorEncoder.getPosition();
+    public double getLeftPivotEncoderPos() {
+        return leftPivotEncoder.getPosition();
     }
 
-    /**
-     * scales value ranging from -1 to 1 to 0 to 1
-     * @param rawValue raw value from joystick; ranging from -1 to 1
-     * @return scaled value; ranging from 0 to 1
-     */
-    public double adjustedSpeed(double rawValue){
-        if (-rawValue <= 0) {
-            return 0.5 - (Math.abs(-rawValue) / 2);
-        } 
-        return (-rawValue / 2) + 0.5;
+    public double getRightPivotEncoderPos() {
+        return rightPivotEncoder.getPosition();
     }
 }
