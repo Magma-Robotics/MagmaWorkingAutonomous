@@ -71,6 +71,9 @@ public class Constants {
         public static class DriveTrain { 
             public static final double kLinearDistanceConversionFactor = 0.12;
         }
+        public static class Pivot {
+            public static final double kLinearDistanceConversionFactor = 0.5;
+        }
     }
 
 

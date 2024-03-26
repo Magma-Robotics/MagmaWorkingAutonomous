@@ -8,7 +8,7 @@ package frc.robot;
 
 import java.time.Duration;
 
-
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -31,7 +31,6 @@ import frc.robot.commands.autos.simples.DriveEncoders;
 import frc.robot.commands.autos.simples.DriveTrainAutoTimeBased;
 import frc.robot.commands.autos.simples.IntakeBackwardAuto;
 import frc.robot.commands.autos.simples.IntakeForwardAuto;
-import frc.robot.commands.autos.simples.Rotate;
 import frc.robot.commands.autos.simples.Rotate180;
 import frc.robot.commands.autos.simples.ShooterForwardAuto;
 import frc.robot.commands.drive.DriveTrainCommand;
@@ -47,9 +46,12 @@ import frc.robot.commands.shooter.ShooterForward;
 import frc.robot.commands.shooter.ShooterMid;
 import frc.robot.commands.shooter.ShooterWeak;
 import frc.robot.commands.shooter.ShooterStop;
+import frc.robot.subsystems.AngleShooter;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
+import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Rotate;
 import frc.robot.subsystems.Shooter;
 
 
@@ -68,6 +70,10 @@ public class RobotContainer {
     Shooter Shooter = new Shooter();
     Intake Intake = new Intake();
     Lift Lift = new Lift();
+    Pivot Pivot = new Pivot();
+    private double botSpeed;
+    private double endDegrees;
+    AngleShooter angleShooter = new AngleShooter(Pivot, botSpeed, endDegrees);
    
     SendableChooser<Command> m_auto_chooser = new SendableChooser<>();
 
@@ -129,6 +135,7 @@ public class RobotContainer {
         this.downPOV.onTrue(new LiftDown(this.Lift)).onFalse(new LiftStop(this.Lift));
         this.buttonA.onTrue(new ShooterWeak(this.Shooter, this.Shooter)).onFalse(new ShooterStop(this.Shooter, this.Shooter));
         this.buttonB.onTrue(new ShooterMid(this.Shooter, this.Shooter)).onFalse(new ShooterStop(this.Shooter, this.Shooter));
+        this.leftPOV.onTrue(new AngleShooter(this.Pivot, 0.5, 6)).onFalse(new AngleShooter(this.Pivot,0,0));
 
 
         this.driverRightBumper.onTrue(new DriveTrainCommandSlower(this.driveTrain, this.driverController)).onFalse(new DriveTrainCommand(this.driveTrain, this.driverController));
