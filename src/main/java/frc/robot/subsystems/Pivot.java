@@ -4,8 +4,16 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Second;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -25,13 +33,23 @@ public class Pivot extends SubsystemBase {
     private CANSparkMax leftPivotMotor, rightPivotMotor;
 
     private RelativeEncoder leftPivotEncoder, rightPivotEncoder;
-    private ProfiledPIDController pivotPIDController;
+    private static final double kDt = 0.02;
+    private ProfiledPIDController pivotPIDController = 
+        new ProfiledPIDController(
+            Constants.Subsystems.Pivot.kP, Constants.Subsystems.Pivot.kI, Constants.Subsystems.Pivot.kD, 
+            new TrapezoidProfile.Constraints(
+                20, 
+                20),
+            kDt);
+    private SimpleMotorFeedforward feedforward =
+        new SimpleMotorFeedforward(Constants.Subsystems.Pivot.kS, Constants.Subsystems.Pivot.kV, Constants.Subsystems.Pivot.kA);
+    private double appliedOutput = 0;
 
 
     public Pivot() {
 
-        this.leftPivotMotor = new CANSparkMax(Constants.Subsystems.Pivot.kLeftPivotId, MotorType.kBrushless);
-        this.rightPivotMotor = new CANSparkMax(Constants.Subsystems.Pivot.kRightPivotId, MotorType.kBrushless);
+        this.leftPivotMotor = new CANSparkMax(1, MotorType.kBrushless);
+        this.rightPivotMotor = new CANSparkMax(12, MotorType.kBrushless);
 
         this.leftPivotEncoder = this.leftPivotMotor.getEncoder();
         rightPivotEncoder = rightPivotMotor.getEncoder();
@@ -39,7 +57,7 @@ public class Pivot extends SubsystemBase {
         this.leftPivotMotor.restoreFactoryDefaults();
         rightPivotMotor.restoreFactoryDefaults();
 
-        rightPivotMotor.follow(leftPivotMotor);
+        rightPivotMotor.follow(leftPivotMotor, true);
 
         leftPivotMotor.setInverted(false);
         rightPivotMotor.setInverted(false);
@@ -51,7 +69,7 @@ public class Pivot extends SubsystemBase {
         SmartDashboard.putNumber("Left Pivot", this.leftPivotEncoder.getPosition());
         SmartDashboard.putData("Pivot PID", pivotPIDController);
     }
-
+    
     public void PivotStop() {
         this.leftPivotMotor.stopMotor();
         rightPivotMotor.stopMotor();
@@ -68,5 +86,24 @@ public class Pivot extends SubsystemBase {
 
     public double getRightPivotEncoderPos() {
         return rightPivotEncoder.getPosition();
+    }
+
+    public void periodic() {
+        SmartDashboard.putNumber("Left Pivot Encoder", leftPivotEncoder.getPosition());
+    }
+
+
+    public Command SetToTarget(double target) {
+        return runOnce(() -> {
+            pivotPIDController.setGoal(target);
+        })
+            .andThen(
+                run(
+                    () -> {
+                        appliedOutput = pivotPIDController.calculate(leftPivotEncoder.getPosition()) 
+                        + feedforward.calculate(pivotPIDController.getSetpoint().velocity);
+                        leftPivotMotor.setVoltage(appliedOutput);
+                    }
+                ));
     }
 }

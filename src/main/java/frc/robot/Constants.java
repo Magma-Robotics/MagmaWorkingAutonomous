@@ -26,7 +26,7 @@ public class Constants {
 
     public static class Subsystems {
         public static class Intake{
-            public static final int kIntakeId = 12;
+            public static final int kIntakeId = 20;//12;
             public static final double kPOWER = 0.7;
         }
         public static class Shooter{
@@ -43,7 +43,7 @@ public class Constants {
             public static final double kPOWER = 1;
         }
         public static class DriveTrain { 
-            public static final int kFrontLeftId = 1;
+            public static final int kFrontLeftId = 21;//1;
             public static final int kRearLeftId = 2;
             public static final int kFrontRightId = 3;
             public static final int kRearRightId = 4;
@@ -53,6 +53,12 @@ public class Constants {
             public static final int kLeftPivotId = 15;
             public static final int kRightPivotId = 16;
             public static final double kLinearDistanceConversionFactor = 0.5;
+            public static final double kP = 0.1;
+            public static final double kI = 0;
+            public static final double kD = 0;
+            public static final double kS = 0;
+            public static final double kV = 0;
+            public static final double kA = 0;
         }
     }
 

@@ -8,6 +8,20 @@
     },
     "Transitory Values": {
       "open": false
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/DifferentialDrive[1]": "DifferentialDrive",
+      "/SmartDashboard/Pivot PID": "ProfiledPIDController",
+      "/SmartDashboard/Scheduler": "Scheduler"
+    },
+    "windows": {
+      "/SmartDashboard/Pivot PID": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Info": {
@@ -48,6 +62,19 @@
       "window": {
         "visible": false
       }
+    },
+    "Plot <1>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 332
+        }
+      ]
     }
   }
 }

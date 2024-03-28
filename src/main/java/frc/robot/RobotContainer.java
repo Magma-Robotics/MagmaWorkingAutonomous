@@ -114,6 +114,8 @@ public class RobotContainer {
         //driverPartnerController.povLeft().onTrue(new AngleShooter(Pivot, 0.5, 6)).onFalse(new AngleShooter(Pivot, 0, 0));
 
         driverController.rightBumper().onTrue(new DriveTrainCommandSlower(driveTrain, driverController)).onFalse(new DriveTrainCommand(driveTrain, driverController));
+        driverController.a().onTrue(Pivot.SetToTarget(0));
+        driverController.b().onTrue(Pivot.SetToTarget(40));
 
         
         //RobotModeTriggers.autonomous().onTrue(Commands.runOnce(driveTrain::resetEncoders));
