@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -26,7 +28,7 @@ public class Constants {
 
     public static class Subsystems {
         public static class Intake{
-            public static final int kIntakeId = 20;//12;
+            public static final int kIntakeId = 12;
             public static final double kPOWER = 0.7;
         }
         public static class Shooter{
@@ -43,11 +45,23 @@ public class Constants {
             public static final double kPOWER = 1;
         }
         public static class DriveTrain { 
-            public static final int kFrontLeftId = 21;//1;
+            public static final int kFrontLeftId = 1;
             public static final int kRearLeftId = 2;
             public static final int kFrontRightId = 3;
             public static final int kRearRightId = 4;
+            
+            public static final double kWheelRadiusMeters = Units.inchesToMeters(3);
+            public static final double kTrackWidthMeters = Units.inchesToMeters(22.5);
+            public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
+
             public static final double kLinearDistanceConversionFactor = 0.12;
+            
+            public static final double kP = 0.1;
+            public static final double kI = 0;
+            public static final double kD = 0;
+            public static final double kS = 0;
+            public static final double kV = 0;
+            public static final double kA = 0;
         }
         public static class Pivot {
             public static final int kLeftPivotId = 15;

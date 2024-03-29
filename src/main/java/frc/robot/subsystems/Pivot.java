@@ -48,8 +48,8 @@ public class Pivot extends SubsystemBase {
 
     public Pivot() {
 
-        this.leftPivotMotor = new CANSparkMax(1, MotorType.kBrushless);
-        this.rightPivotMotor = new CANSparkMax(12, MotorType.kBrushless);
+        this.leftPivotMotor = new CANSparkMax(Constants.Subsystems.Pivot.kLeftPivotId, MotorType.kBrushless);
+        this.rightPivotMotor = new CANSparkMax(Constants.Subsystems.Pivot.kRightPivotId, MotorType.kBrushless);
 
         this.leftPivotEncoder = this.leftPivotMotor.getEncoder();
         rightPivotEncoder = rightPivotMotor.getEncoder();

@@ -7,7 +7,13 @@ package frc.robot;
 
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -26,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.autos.complex.Complex;
 import frc.robot.commands.autos.simples.AngleShooter;
 import frc.robot.commands.autos.simples.DriveEncoders;
@@ -34,6 +41,7 @@ import frc.robot.commands.autos.simples.IntakeBackwardAuto;
 import frc.robot.commands.autos.simples.IntakeForwardAuto;
 import frc.robot.commands.autos.simples.Rotate180;
 import frc.robot.commands.autos.simples.ShooterForwardAuto;
+import frc.robot.commands.drive.DriveTest;
 import frc.robot.commands.drive.DriveTrainCommand;
 import frc.robot.commands.drive.DriveTrainCommandSlower;
 import frc.robot.commands.intake.IntakeBackward;
@@ -63,19 +71,25 @@ import frc.robot.subsystems.Shooter;
 public class RobotContainer {
    
     // The robot's subsystems and commands are defined here...
-    DriveTrain driveTrain = new DriveTrain();
-    Shooter Shooter = new Shooter();
-    Intake Intake = new Intake();
-    Lift Lift = new Lift();
-    Pivot Pivot = new Pivot();
+    private DriveTrain driveTrain = new DriveTrain();
+    private Shooter Shooter = new Shooter();
+    private Intake Intake = new Intake();
+    private Lift Lift = new Lift();
+    private Pivot Pivot = new Pivot();
    
-    SendableChooser<Command> m_auto_chooser = new SendableChooser<>();
+    private SendableChooser<Command> m_auto_chooser;
 
 
     CommandXboxController driverController, driverPartnerController;
    
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        List<Pair<String, Command>> namedCommands = new ArrayList<Pair<String, Command>>();
+        //namedCommands.add(new Pair<String,Command>("autoShootNote", new AutoShootNote(shooter, intake)));
+        NamedCommands.registerCommands(namedCommands);
+
+        m_auto_chooser = AutoBuilder.buildAutoChooser();
+        
         this.driverController = new CommandXboxController(Constants.Control.ControllerPort.kDRIVER);
         this.driverPartnerController = new CommandXboxController(Constants.Control.ControllerPort.kPARTNER);
        
@@ -83,7 +97,7 @@ public class RobotContainer {
 
 
         SmartDashboard.putData("Auto Chooser", m_auto_chooser);
-        m_auto_chooser.addOption("Middle Auto", MiddleAuto());
+        //m_auto_chooser.addOption("Middle Auto", MiddleAuto());
        
         // buildShuffleboard();
         // Configure the trigger bindings
@@ -113,9 +127,23 @@ public class RobotContainer {
         //driverPartnerController.b().onTrue(new ShooterMid(Shooter)).onFalse(new ShooterStop(Shooter));
         //driverPartnerController.povLeft().onTrue(new AngleShooter(Pivot, 0.5, 6)).onFalse(new AngleShooter(Pivot, 0, 0));
 
-        driverController.rightBumper().onTrue(new DriveTrainCommandSlower(driveTrain, driverController)).onFalse(new DriveTrainCommand(driveTrain, driverController));
-        driverController.a().onTrue(Pivot.SetToTarget(0));
-        driverController.b().onTrue(Pivot.SetToTarget(40));
+        //driverController.rightBumper().onTrue(new DriveTrainCommandSlower(driveTrain, driverController)).onFalse(new DriveTrainCommand(driveTrain, driverController));
+    driverController
+        .a()
+        .and(driverController.rightBumper())
+        .whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    driverController
+        .b()
+        .and(driverController.rightBumper())
+        .whileTrue(driveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    driverController
+        .x()
+        .and(driverController.rightBumper())
+        .whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    driverController
+        .y()
+        .and(driverController.rightBumper())
+        .whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
         
         //RobotModeTriggers.autonomous().onTrue(Commands.runOnce(driveTrain::resetEncoders));

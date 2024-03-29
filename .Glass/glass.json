@@ -13,10 +13,16 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/DifferentialDrive[1]": "DifferentialDrive",
+      "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Pivot PID": "ProfiledPIDController",
       "/SmartDashboard/Scheduler": "Scheduler"
     },
     "windows": {
+      "/SmartDashboard/Field": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Pivot PID": {
         "window": {
           "visible": true
