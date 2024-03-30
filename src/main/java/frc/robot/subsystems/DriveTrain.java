@@ -71,18 +71,18 @@ public class DriveTrain extends SubsystemBase {
     private double wheelRadius = Constants.Subsystems.DriveTrain.kWheelRadiusMeters;
 
     private PIDController leftWheelsController = new PIDController(
-        Constants.Subsystems.DriveTrain.kP, Constants.Subsystems.DriveTrain.kI, Constants.Subsystems.DriveTrain.kD
+        Constants.Subsystems.DriveTrain.kLeftP, Constants.Subsystems.DriveTrain.kLeftI, Constants.Subsystems.DriveTrain.kLeftD
         ); 
     private PIDController rightWheelsController = new PIDController(
-        Constants.Subsystems.DriveTrain.kP, Constants.Subsystems.DriveTrain.kI, Constants.Subsystems.DriveTrain.kD
+        Constants.Subsystems.DriveTrain.kRightP, Constants.Subsystems.DriveTrain.kRightI, Constants.Subsystems.DriveTrain.kRightD
         ); 
 
     private SimpleMotorFeedforward leftWheelFeedforward = new SimpleMotorFeedforward(
-        Constants.Subsystems.DriveTrain.kS, Constants.Subsystems.DriveTrain.kV, Constants.Subsystems.DriveTrain.kA
+        Constants.Subsystems.DriveTrain.kLeftS, Constants.Subsystems.DriveTrain.kLeftV, Constants.Subsystems.DriveTrain.kLeftA
         );
 
     private SimpleMotorFeedforward rightWheelFeedforward = new SimpleMotorFeedforward(
-        Constants.Subsystems.DriveTrain.kS, Constants.Subsystems.DriveTrain.kV, Constants.Subsystems.DriveTrain.kA
+        Constants.Subsystems.DriveTrain.kRightS, Constants.Subsystems.DriveTrain.kRightV, Constants.Subsystems.DriveTrain.kRightA
         );
 
     private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0)); 
@@ -167,6 +167,9 @@ public class DriveTrain extends SubsystemBase {
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
+
+        SmartDashboard.putData("Left Wheel PID", leftWheelsController);
+        SmartDashboard.putData("Right Wheel PID", rightWheelsController);
     }
 
     public void periodic() {

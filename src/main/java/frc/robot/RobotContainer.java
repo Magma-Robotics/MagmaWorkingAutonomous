@@ -145,6 +145,22 @@ public class RobotContainer {
         .and(driverController.rightBumper())
         .whileTrue(driveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
+    driverController
+        .a()
+        .and(driverController.leftBumper())
+        .whileTrue(Shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    driverController
+        .b()
+        .and(driverController.leftBumper())
+        .whileTrue(Shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    driverController
+        .x()
+        .and(driverController.leftBumper())
+        .whileTrue(Shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    driverController
+        .y()
+        .and(driverController.leftBumper())
+        .whileTrue(Shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
         
         //RobotModeTriggers.autonomous().onTrue(Commands.runOnce(driveTrain::resetEncoders));
     }

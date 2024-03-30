@@ -38,6 +38,14 @@ public class Constants {
             public static final double kPOWER = 0.7;
             public static final double kPOWERWEAKER = 0.5;
 
+            public static final double kLeftS = 0;
+            public static final double kLeftV = 0;
+            public static final double kLeftA = 0;
+
+            public static final double kRightS = 0;
+            public static final double kRightV = 0;
+            public static final double kRightA = 0;
+
         }
         public static class Lift{
             public static final int kLeftLiftId = 13;
@@ -56,12 +64,18 @@ public class Constants {
 
             public static final double kLinearDistanceConversionFactor = 0.12;
             
-            public static final double kP = 0.1;
-            public static final double kI = 0;
-            public static final double kD = 0;
-            public static final double kS = 0;
-            public static final double kV = 0;
-            public static final double kA = 0;
+            public static final double kLeftP = 0.1;
+            public static final double kLeftI = 0;
+            public static final double kLeftD = 0;
+            public static final double kLeftS = 0;
+            public static final double kLeftV = 0;
+            public static final double kLeftA = 0;
+            public static final double kRightP = 0.1;
+            public static final double kRightI = 0;
+            public static final double kRightD = 0;
+            public static final double kRightS = 0;
+            public static final double kRightV = 0;
+            public static final double kRightA = 0;
         }
         public static class Pivot {
             public static final int kLeftPivotId = 15;
