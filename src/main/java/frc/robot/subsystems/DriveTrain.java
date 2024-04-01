@@ -99,14 +99,14 @@ public class DriveTrain extends SubsystemBase {
             log.motor("drive-left")
                 .voltage(
                     m_appliedVoltage.mut_replace(
-                        frontLeftDrive.get() * RobotController.getBatteryVoltage(), Volts))
+                        frontLeftDrive.getAppliedOutput() * frontLeftDrive.getBusVoltage(), Volts))
                     .linearPosition(m_distance.mut_replace(leftDriveEncoder.getPosition(), Meters))
                     .linearVelocity(
                         m_velocity.mut_replace(leftDriveEncoder.getVelocity(), MetersPerSecond));
             log.motor("drive-right")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            frontRightDrive.get() * RobotController.getBatteryVoltage(), Volts))
+                .voltage(
+                    m_appliedVoltage.mut_replace(
+                        frontRightDrive.getAppliedOutput() * frontRightDrive.getBusVoltage(), Volts))
                     .linearPosition(m_distance.mut_replace(rightDriveEncoder.getPosition(), Meters))
                     .linearVelocity(
                         m_velocity.mut_replace(rightDriveEncoder.getVelocity(), MetersPerSecond));
@@ -126,11 +126,17 @@ public class DriveTrain extends SubsystemBase {
         rearRightDrive.follow(frontRightDrive);
         rearLeftDrive.follow(frontLeftDrive);
 
-        leftDriveEncoder.setPositionConversionFactor(.039);
+        /*leftDriveEncoder.setPositionConversionFactor(.039);
         rightDriveEncoder.setPositionConversionFactor(.039);
 
         leftDriveEncoder.setVelocityConversionFactor(.039 / 60);
-        rightDriveEncoder.setVelocityConversionFactor(.039 / 60);
+        rightDriveEncoder.setVelocityConversionFactor(.039 / 60);*/
+
+        leftDriveEncoder.setPositionConversionFactor(2 * Math.PI * wheelRadius / 8.46);
+        rightDriveEncoder.setPositionConversionFactor(2 * Math.PI * wheelRadius / 8.46);
+
+        leftDriveEncoder.setVelocityConversionFactor(2 * Math.PI * wheelRadius / (8.46 * 60));
+        rightDriveEncoder.setVelocityConversionFactor(2 * Math.PI * wheelRadius / (8.46 * 60));
 
         //this.leftDriveEncoder.setPositionConversionFactor(Constants.Subsystems.DriveTrain.kLinearDistanceConversionFactor);
         //this.rightDriveEncoder.setPositionConversionFactor(Constants.Subsystems.DriveTrain.kLinearDistanceConversionFactor);

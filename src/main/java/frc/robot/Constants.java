@@ -46,6 +46,10 @@ public class Constants {
             public static final double kRightV = 0;
             public static final double kRightA = 0;
 
+            public static final double kHome = 0;
+            public static final double kSpeaker = 0.7;
+            public static final double kAmp = 1;
+
         }
         public static class Lift{
             public static final int kLeftLiftId = 13;

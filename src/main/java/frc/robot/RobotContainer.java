@@ -80,7 +80,7 @@ public class RobotContainer {
     private SendableChooser<Command> m_auto_chooser;
 
 
-    CommandXboxController driverController, driverPartnerController;
+    CommandXboxController driverController, driverPartnerController, testController;
    
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -92,6 +92,7 @@ public class RobotContainer {
         
         this.driverController = new CommandXboxController(Constants.Control.ControllerPort.kDRIVER);
         this.driverPartnerController = new CommandXboxController(Constants.Control.ControllerPort.kPARTNER);
+        testController = new CommandXboxController(2);
        
         this.driveTrain.setDefaultCommand(new DriveTrainCommand(this.driveTrain, this.driverController));
 
@@ -126,6 +127,8 @@ public class RobotContainer {
         //driverPartnerController.a().onTrue(new ShooterWeak(Shooter)).onFalse(new ShooterStop(Shooter));
         //driverPartnerController.b().onTrue(new ShooterMid(Shooter)).onFalse(new ShooterStop(Shooter));
         //driverPartnerController.povLeft().onTrue(new AngleShooter(Pivot, 0.5, 6)).onFalse(new AngleShooter(Pivot, 0, 0));
+
+        testController.x().onTrue(new DriveTest(driveTrain, 1));
 
         //driverController.rightBumper().onTrue(new DriveTrainCommandSlower(driveTrain, driverController)).onFalse(new DriveTrainCommand(driveTrain, driverController));
     driverController

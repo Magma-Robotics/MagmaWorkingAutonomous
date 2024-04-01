@@ -22,42 +22,6 @@
           "data": {
             "pathName": "Back"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Forward"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Back"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Forward"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Back"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Forward"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Back"
-          }
         }
       ]
     }

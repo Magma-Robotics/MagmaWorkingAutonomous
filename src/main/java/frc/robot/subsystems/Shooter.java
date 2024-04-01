@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -14,7 +16,9 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
@@ -33,8 +37,8 @@ public class Shooter extends SubsystemBase {
      * an abstract representation of a physical robot arm
      */
     private CANSparkMax leftShooter, rightShooter, pushMotor;
-    private RelativeEncoder leftEncoder = leftShooter.getEncoder();
-    private RelativeEncoder rightEncoder = rightShooter.getEncoder();
+    private RelativeEncoder leftEncoder;
+    private RelativeEncoder rightEncoder;
 
     private SimpleMotorFeedforward leftFeedforward = new SimpleMotorFeedforward(
         Constants.Subsystems.Shooter.kLeftS, Constants.Subsystems.Shooter.kLeftV, Constants.Subsystems.Shooter.kLeftA);
@@ -43,32 +47,33 @@ public class Shooter extends SubsystemBase {
         Constants.Subsystems.Shooter.kRightS, Constants.Subsystems.Shooter.kRightV, Constants.Subsystems.Shooter.kRightA);
 
     private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
-    private final MutableMeasure<Angle> m_angle = mutable(Rotations.of(0));
-    private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RPM.of(0));
+    private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+    private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
 
     private final SysIdRoutine m_sysIdRoutine =
         new SysIdRoutine(
             new SysIdRoutine.Config(),
             new SysIdRoutine.Mechanism(
                 (Measure<Voltage> volts) -> {
-                    leftShooter.setVoltage(volts.in(Volts));
+                    leftShooter.set(volts.in(Volts) / RobotController.getBatteryVoltage());
+                    rightShooter.set(volts.in(Volts) / RobotController.getBatteryVoltage());
                 },
                 log -> {
                     log.motor("shooter-left")
                         .voltage(
                             m_appliedVoltage.mut_replace(
-                                leftShooter.get() * RobotController.getBatteryVoltage(), Volts))
-                        .angularPosition(m_angle.mut_replace(leftEncoder.getPosition(), Rotations))
-                        .angularVelocity(
-                            m_velocity.mut_replace(leftEncoder.getVelocity(), RPM));
+                                leftShooter.getAppliedOutput() * leftShooter.getBusVoltage(), Volts))
+                        .linearPosition(m_distance.mut_replace(leftEncoder.getPosition(), Meters))
+                        .linearVelocity(
+                            m_velocity.mut_replace(leftEncoder.getVelocity(), MetersPerSecond));
 
                     log.motor("shooter-right")
                         .voltage(
                             m_appliedVoltage.mut_replace(
-                                rightShooter.get() * RobotController.getBatteryVoltage(), Volts))
-                        .angularPosition(m_angle.mut_replace(rightEncoder.getPosition(), Rotations))
-                        .angularVelocity(
-                            m_velocity.mut_replace(rightEncoder.getVelocity(), RPM));
+                                rightShooter.getAppliedOutput() * rightShooter.getBusVoltage(), Volts))
+                        .linearPosition(m_distance.mut_replace(rightEncoder.getPosition(), Meters))
+                        .linearVelocity(
+                            m_velocity.mut_replace(rightEncoder.getVelocity(), MetersPerSecond));
                 },
                 this));
 
@@ -81,6 +86,14 @@ public class Shooter extends SubsystemBase {
         this.rightShooter = new CANSparkMax(Constants.Subsystems.Shooter.kRightShooterId, MotorType.kBrushless);
         pushMotor = new CANSparkMax(Constants.Subsystems.Shooter.kPushMotorId, MotorType.kBrushless);
         
+
+        leftEncoder = leftShooter.getEncoder();
+        rightEncoder = rightShooter.getEncoder();
+
+        leftEncoder.setPositionConversionFactor(Units.inchesToMeters(4) * Math.PI);
+        rightEncoder.setPositionConversionFactor(Units.inchesToMeters(4) * Math.PI);
+        leftEncoder.setVelocityConversionFactor(Units.inchesToMeters(4) * Math.PI / 60);
+        rightEncoder.setVelocityConversionFactor(Units.inchesToMeters(4) * Math.PI / 60);
         leftShooter.setInverted(true);
 
         leftShooter.burnFlash();
