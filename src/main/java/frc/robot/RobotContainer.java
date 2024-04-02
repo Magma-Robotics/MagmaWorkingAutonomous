@@ -53,6 +53,7 @@ import frc.robot.commands.lift.LiftUp;
 import frc.robot.commands.shooter.ShooterBackward;
 import frc.robot.commands.shooter.ShooterForward;
 import frc.robot.commands.shooter.ShooterStop;
+import frc.robot.commands.shooter.TargetFeedforward;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
@@ -129,6 +130,7 @@ public class RobotContainer {
         //driverPartnerController.povLeft().onTrue(new AngleShooter(Pivot, 0.5, 6)).onFalse(new AngleShooter(Pivot, 0, 0));
 
         testController.x().onTrue(new DriveTest(driveTrain, 1));
+        driverController.y().onTrue(new TargetFeedforward(Shooter, 6)).onFalse(new ShooterStop(Shooter));
 
         //driverController.rightBumper().onTrue(new DriveTrainCommandSlower(driveTrain, driverController)).onFalse(new DriveTrainCommand(driveTrain, driverController));
     driverController

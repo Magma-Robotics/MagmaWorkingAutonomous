@@ -108,13 +108,9 @@ public class Shooter extends SubsystemBase {
         return m_sysIdRoutine.dynamic(direction);
     }
 
-    public Command TargetFeedforward(double leftWheel, double rightWheel) {
-        return run(
-            () -> {
-                leftShooter.setVoltage(leftFeedforward.calculate(leftWheel));
-                rightShooter.setVoltage(rightFeedforward.calculate(rightWheel));
-            }
-        );
+    public void TargetFeedforward(double velocity) {
+        leftShooter.setVoltage(leftFeedforward.calculate(velocity));
+        rightShooter.setVoltage(rightFeedforward.calculate(velocity));
     }
 
     public void stopShooter() {

@@ -32,19 +32,19 @@ public class Constants {
             public static final double kPOWER = 0.7;
         }
         public static class Shooter{
-            public static final int kLeftShooterId = 10;
-            public static final int kRightShooterId = 11;
+            public static final int kLeftShooterId = 7;//10;
+            public static final int kRightShooterId = 8;//11;
             public static final int kPushMotorId = 17;
             public static final double kPOWER = 0.7;
             public static final double kPOWERWEAKER = 0.5;
 
-            public static final double kLeftS = 0;
-            public static final double kLeftV = 0;
-            public static final double kLeftA = 0;
+            public static final double kLeftS = 0.23643;
+            public static final double kLeftV = 0.38942;
+            public static final double kLeftA = 0.046395;
 
-            public static final double kRightS = 0;
-            public static final double kRightV = 0;
-            public static final double kRightA = 0;
+            public static final double kRightS = 0.20658;
+            public static final double kRightV = 0.38488;
+            public static final double kRightA = 0.041661;
 
             public static final double kHome = 0;
             public static final double kSpeaker = 0.7;
